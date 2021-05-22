@@ -1,4 +1,3 @@
-import sys
 import cv2
 from tensorflow.keras.models import model_from_json
 import numpy as np
@@ -11,7 +10,6 @@ def img_preprocess(img):
     img = cv2.GaussianBlur(img, (5, 5), 1)
     img = cv2.adaptiveThreshold(
         img, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY_INV, 11, 2)
-    # img = cv2.adaptiveThreshold(img, 255, cv2.ADAPTIVE_MEAN_C, cv2.THRESH_BINARY, 11, 2)
     return img
 
 
@@ -65,19 +63,14 @@ def load_models():
     model_names = ['Model(97.09)', 'Model(97.64)',
                    'Model(98.79)', 'Model(98.94)',
                    'Model(95.95)']
-    # model_names = ['Model(97.09)', 'Model(97.64)',
-    #                'Model(98.79)', 'Model(98.94)',
-    #                'Model(95.95)', 'Model(93.43)',
-    #                'Model(93.48)']
     models = []
     for m in model_names:
-        json_file = open(f'../Models/{m}.json', 'r')
+        json_file = open(f'{m}.json', 'r')
         model_json = json_file.read()
         json_file.close()
         model = model_from_json(model_json)
-        model.load_weights(f'../Models/{m}.h5')
+        model.load_weights(f'{m}.h5')
         models.append(model)
-    # print('Models Loaded From Disk!')
     return models
 
 
@@ -115,13 +108,9 @@ def get_grid(boxes, nrows, ncols):
     for r in boxes:
         row_matrix = []
         for c in r:
-            perct = np.round((counter / elements) * 100, 2)
             perct_ = int((counter / elements) * 100)
             alpha = predict_alphabet(c, models)
             row_matrix.append(alpha)
-            prect_s = f'Processing : {perct}'
-            sys.stdout.write('\r'+str(prect_s)+'%')
-            sys.stdout.flush()
             counter += 1
             my_bar.progress(perct_)
         matrix.append(row_matrix)
@@ -262,7 +251,6 @@ def plot_lines(black_boxes, word_positions):
 
 
 def get_word_boxes(word_positions, word_matrix, nrows, ncols, black_boxes):
-    # print('\n\n')
     print('WORD POSITIONS AND DIRECTIONS')
     new_word_positions = {}
     directions = []
@@ -275,8 +263,6 @@ def get_word_boxes(word_positions, word_matrix, nrows, ncols, black_boxes):
             continue
         word_directions = get_dir_words(
             word, word_matrix, posx, posy, nrows, ncols)
-        print(
-            f'{word} is found at ({str(posx)},{str(posy)}) in the direction {str(word_directions)}')
         new_word_positions[word] = [posx, posy, word_directions]
     drawn_boxes = plot_lines(black_boxes, new_word_positions)
     image_mask_temp = []
