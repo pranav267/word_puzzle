@@ -1,7 +1,4 @@
 import streamlit as st
-import pandas as pd
-import cv2
-import numpy as np
 from utils import word_puzzle
 from PIL import Image
 
