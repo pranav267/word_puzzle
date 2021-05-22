@@ -24,7 +24,7 @@ try:
 
     if image_file is not None:
         image = Image.open(image_file).convert('RGB')
-        image.save('../Images/input.jpg')
+        image.save('input.jpg')
         with col5:
             st.markdown('### **INPUT IMAGE**')
             st.image(image_file, caption='Input Image')
