@@ -49,7 +49,7 @@ try:
                 st.error('Enter words to be searched')
             else:
                 st.success('Processing')
-                op = word_puzzle('../Images/input.jpg', nrows, ncols, words)
+                op = word_puzzle('input.jpg', nrows, ncols, words)
                 st.success('Done')
         col12, col13, col14 = st.beta_columns([5, 10, 5])
         if op is not None:
